@@ -14,35 +14,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
-  // @override
-  // void initState() {
-  //   // homeController.generateList();
+  final homeController = HomeController(sizeOfList: 100);
 
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //     sort();
-  //   });
-
-  //   super.initState();
-  // }
-
-  // final homeController = HomeController();
+  final ValueNotifier<bool> isBarStyle = RxNotifier(true);
 
   @override
   Widget build(BuildContext context) {
-    final value = context.select(() => values.value);
+    context.select(() => {homeController.values.value, isBarStyle.value});
     final height = (MediaQuery.of(context).size.height) - kToolbarHeight - 10 - 40;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sort')),
+      appBar: AppBar(
+        title: const Text('Bubble Sort Example'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => isBarStyle.value = !isBarStyle.value,
+            icon: Icon(isBarStyle.value == true ? Icons.equalizer : Icons.grain),
+          ),
+          const SizedBox(width: 20),
+        ],
+      ),
       body: Column(
         children: [
           const SizedBox(height: 10),
@@ -50,26 +52,57 @@ class HomePage extends StatelessWidget {
             height: height,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: value.map((element) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
+              children: homeController.values.value.map((element) {
+                if (isBarStyle.value == true) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 2),
                     height: lerpDouble(0, (height), (element / 1000)),
-                    width: (MediaQuery.of(context).size.width / quantity) - 4,
+                    width: (MediaQuery.of(context).size.width / homeController.sizeOfList) - 4,
                     color: Theme.of(context).primaryColor,
-                  ),
-                );
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      const Spacer(),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        height: (MediaQuery.of(context).size.width / homeController.sizeOfList) - 4,
+                        width: (MediaQuery.of(context).size.width / homeController.sizeOfList) - 4,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      SizedBox(
+                        height: lerpDouble(0, (height - 10), (element / 1000)),
+                      ),
+                    ],
+                  );
+                }
               }).toList(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size.fromHeight(36),
-              ),
-              onPressed: () => sort(),
-              child: const Text('sort'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size.fromHeight(36),
+                  ),
+                  onPressed: () => homeController.generateList(),
+                  child: const Text('reset'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size.fromHeight(36),
+                  ),
+                  onPressed: () => homeController.sort(),
+                  child: const Text('sort'),
+                ),
+              ],
             ),
           ),
         ],

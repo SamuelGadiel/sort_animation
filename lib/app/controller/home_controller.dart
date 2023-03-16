@@ -29,4 +29,24 @@ class HomeController {
     }
   }
 
+  Future<void> selectionSort() async {
+    for (int i = 0; i < homeStore.items.length - 1; i++) {
+      int minorIndex = i;
+
+      for (int j = i + 1; j < homeStore.items.length; j++) {
+        if (homeStore.items[j] < homeStore.items[minorIndex]) {
+          minorIndex = j;
+        }
+      }
+
+      if (minorIndex != i) {
+        int aux = homeStore.items[i];
+        homeStore.items[i] = homeStore.items[minorIndex];
+        homeStore.items[minorIndex] = aux;
+
+        await Future.delayed(const Duration(milliseconds: 30));
+        homeStore.listNotifier.value = homeStore.items.toList();
+      }
+    }
+  }
 }

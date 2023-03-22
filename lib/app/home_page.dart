@@ -40,8 +40,6 @@ class HomePage extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: homeStore.listNotifier.value.map((element) {
-                  
-
                 if (homeStore.isBarStyle.value == true) {
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2),
@@ -98,6 +96,14 @@ class HomePage extends StatelessWidget {
                   ),
                   onPressed: () => homeController.selectionSort(),
                   child: const Text('Selection Sort'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size.fromHeight(36),
+                  ),
+                  onPressed: () => homeController.insertionSort(),
+                  child: const Text('Insertion Sort'),
                 ),
               ],
             ),

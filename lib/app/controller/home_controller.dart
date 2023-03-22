@@ -15,6 +15,11 @@ class HomeController {
     homeStore.listNotifier.value = List<int>.generate(sizeOfList, (int index) => random.nextInt(1000));
   }
 
+  Future<void> updateScreen() async {
+    await Future.delayed(const Duration(milliseconds: 30));
+    homeStore.listNotifier.value = homeStore.items.toList();
+  }
+
   Future<void> bubbleSort() async {
     for (int i = 0; i < homeStore.items.length; i++) {
       for (int j = 0; j < homeStore.items.length - i - 1; j++) {
@@ -22,8 +27,7 @@ class HomeController {
           int aux = homeStore.items[j];
           homeStore.items[j] = homeStore.items[j + 1];
           homeStore.items[j + 1] = aux;
-          await Future.delayed(const Duration(milliseconds: 30));
-          homeStore.listNotifier.value = homeStore.items.toList();
+          await updateScreen();
         }
       }
     }
@@ -36,6 +40,7 @@ class HomeController {
       for (int j = i + 1; j < homeStore.items.length; j++) {
         if (homeStore.items[j] < homeStore.items[minorIndex]) {
           minorIndex = j;
+          await updateScreen();
         }
       }
 
@@ -44,9 +49,25 @@ class HomeController {
         homeStore.items[i] = homeStore.items[minorIndex];
         homeStore.items[minorIndex] = aux;
 
-        await Future.delayed(const Duration(milliseconds: 30));
-        homeStore.listNotifier.value = homeStore.items.toList();
+        await updateScreen();
       }
+    }
+  }
+
+  Future<void> insertionSort() async {
+    for (int i = 1; i < homeStore.items.length; i++) {
+      int key = homeStore.items[i];
+      int j = i - 1;
+
+      while (j >= 0 && homeStore.items[j] > key) {
+        homeStore.items[j + 1] = homeStore.items[j];
+        j--;
+
+        await updateScreen();
+      }
+      homeStore.items[j + 1] = key;
+
+      await updateScreen();
     }
   }
 }

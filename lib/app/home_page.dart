@@ -77,14 +77,17 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size.fromHeight(36),
+                    backgroundColor: const Color(0xFF005c3c),
+                    foregroundColor: const Color(0xFF83f5cb),
                   ),
                   onPressed: () => homeController.generateList(sizeOfList),
-                  child: const Text('reset'),
+                  child: const Text('Generate'),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 128),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size.fromHeight(36),
+                    foregroundColor: const Color(0xFFdedfff),
                   ),
                   onPressed: () => homeController.bubbleSort(),
                   child: const Text('Buuble Sort'),
@@ -93,6 +96,7 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size.fromHeight(36),
+                    foregroundColor: const Color(0xFFdedfff),
                   ),
                   onPressed: () => homeController.selectionSort(),
                   child: const Text('Selection Sort'),
@@ -101,6 +105,7 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size.fromHeight(36),
+                    foregroundColor: const Color(0xFFdedfff),
                   ),
                   onPressed: () => homeController.insertionSort(),
                   child: const Text('Insertion Sort'),
